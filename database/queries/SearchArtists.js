@@ -23,6 +23,11 @@ module.exports = (criteria, sortProperty, offset = 0, limit = 20) => {
         }
     }
 
+    if (criteria.genre)
+    {
+        query.genre = { $eq: criteria.genre}
+    }
+
     if (criteria.yearsActive)
     {
         query.yearsActive = {
@@ -36,6 +41,12 @@ module.exports = (criteria, sortProperty, offset = 0, limit = 20) => {
         query.$text = {
             $search: criteria.name
         };
+    }
+
+    
+    if (criteria.album)
+    {
+        query["albums.title"] = RegExp(`.*${criteria.album}.*`,'i');
     }
 
 

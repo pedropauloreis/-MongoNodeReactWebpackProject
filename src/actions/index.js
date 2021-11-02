@@ -10,7 +10,8 @@ import {
   CLEAR_ERROR,
   DESELECT_ARTIST,
   SELECT_ARTIST,
-  RESET_SELECTION
+  RESET_SELECTION,
+  SET_DISTINCT_GENRE
 } from './types';
 
 import GetAgeRange from '../../database/queries/GetAgeRange';
@@ -22,6 +23,7 @@ import EditArtist from '../../database/queries/EditArtist';
 import DeleteArtist from '../../database/queries/DeleteArtist';
 import SetRetired from '../../database/queries/SetRetired';
 import SetNotRetired from '../../database/queries/SetNotRetired';
+import GetDistinctGenres from '../../database/queries/GetDistinctGenres';
 
 export const resetArtist = () => {
   return { type: RESET_ARTIST };
@@ -48,6 +50,13 @@ export const setNotRetired = ids => (dispatch, getState) =>
   SetNotRetiredProxy(ids.map(id => id.toString()))
     .then(() => dispatch({ type: RESET_SELECTION }))
     .then(() => refreshSearch(dispatch, getState));
+
+
+export const setDistinctRange = () => dispatch =>
+GetDistinctGenresProxy()
+  .then(genres =>
+    dispatch({ type: SET_DISTINCT_GENRE, payload: genres })
+  );
 
 export const setAgeRange = () => dispatch =>
   GetAgeRangeProxy()
@@ -102,6 +111,15 @@ export const deleteArtist = (id) => dispatch =>
 
 //
 // Faux Proxies
+
+
+const GetDistinctGenresProxy = (...args) => {
+  const result = GetDistinctGenres(...args);
+  if (!result || !result.then) {
+    return new Promise(() => {});
+  }
+  return result;
+};
 
 const GetAgeRangeProxy = (...args) => {
   const result = GetAgeRange(...args);

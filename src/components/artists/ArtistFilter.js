@@ -5,7 +5,8 @@ import { Range } from '../filters';
 import * as actions from '../../actions';
 
 const TEXT_FIELDS = [
-  { label: 'Name', prop: 'name' }
+  { label: 'Name', prop: 'name' },
+  { label: 'Album', prop: 'album' }
 ];
 
 class ArtistFilter extends Component {
@@ -26,6 +27,8 @@ class ArtistFilter extends Component {
   componentDidMount() {
     this.props.setAgeRange();
     this.props.setYearsActiveRange();
+    this.props.setDistinctRange();
+
   }
 
   handleSubmit(formProps) {
@@ -49,6 +52,13 @@ class ArtistFilter extends Component {
     );
   }
 
+  renderGenres() {
+    if(this.props.genre)
+    return this.props.genre.map((genre) =>
+      <option value={genre} key={genre} >{genre}</option>
+    );
+  }
+
   render() {
     const { handleSubmit } = this.props;
 
@@ -61,6 +71,14 @@ class ArtistFilter extends Component {
             </div>
 
             {this.renderInputs()}
+            
+            <div>
+              <label className="select" htmlFor="genre">Genre</label>
+              <Field id="genre" name="genre" component="select">
+                <option value="">Select</option>
+                {this.renderGenres()}
+              </Field>
+            </div>
 
             <div className="input-field">
               <Field
@@ -109,6 +127,7 @@ const mapStateToProps = (state) => {
   return {
     yearsActive: filterCriteria.yearsActive,
     ageRange: filterCriteria.age,
+    genre: filterCriteria.genre,
     filters: state.form.filters && state.form.filters.values
   };
 };

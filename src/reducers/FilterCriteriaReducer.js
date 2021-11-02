@@ -1,6 +1,7 @@
 import {
   SET_AGE_RANGE,
-  SET_YEARS_ACTIVE_RANGE
+  SET_YEARS_ACTIVE_RANGE,
+  SET_DISTINCT_GENRE
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -13,6 +14,8 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, age: action.payload };
     case SET_YEARS_ACTIVE_RANGE:
       return { ...state, yearsActive: action.payload };
+    case SET_DISTINCT_GENRE:
+      return { ...state, genre: action.payload };
     default:
       return state;
   }
